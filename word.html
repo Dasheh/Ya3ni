@@ -1,1 +1,70 @@
-w
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Word Details</title>
+  <style>
+    body {
+      font-family :Arial,sans-serif;
+      background-color: #f7f4eb;
+      color: #1b4332;
+      padding: 2rem;
+      max-width: 800px;
+      margin: auto;
+    }
+  h1 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    p {
+        font-size: 1.2rem;
+    }
+    button {
+        margin-top: 1rem;
+        background: #1b4332;
+        color: #f7f4eb;
+        border: none;
+        border-radius: 5px;
+        padding: 0.7rem 1.5rem;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="wordTitle">Loading...</h1>
+  <p id="wordMeaning"><strong>Meaning:</strong> Loading...</p>
+  <p id="wordExample"><strong>Example:</strong> Loading...</p>
+  <button onclick="playAudio()">🔊 Listen to Pronunciation</button>
+
+  <script>
+    const slangWords = [
+        { word: "كفو (Kafu)", meaning: "Well done", example: "كفو عليك!", audio: "audio/kafu.mp3" },
+        { word: "فلة (Falla)", meaning: "Fun", example: "الحفلة كانت فلة!", audio: "audio/falla.mp3" },
+        { word: "تمام (Tamam)", meaning: "Good", example: "أنا تمام", audio: "audio/tamam.mp3" },
+    ];
+
+    const params = new URLSearchParams(window.location.search);
+    const wordQuery = params.get("word");
+
+    const wordData = slangWords.find(w => w.word === wordQuery);
+
+    if (wordData) {
+        document.getElementById("wordTitle").textContent = wordData.word;
+        document.getElementById("wordMeaning").innerHTML = `<strong>Meaning:</strong> ${wordData.meaning}`;
+        document.getElementById("wordExample").innerHTML = `<strong>Example:</strong> ${wordData.example}`;
+    } else {
+        document.getElementById("wordTitle").textContent = "Word Not Found";
+        document.getElementById("wordMeaning").textContent = "";
+        document.getElementById("wordExample").textContent = "";
+    }
+
+    function playAudio() {
+        if (wordData && wordData.audio) {
+            const audio = new Audio(wordData.audio);
+            audio.play();
+        }
+    }
+  </script>
+</body>
+</html>
