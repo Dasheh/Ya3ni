@@ -301,14 +301,12 @@
             const query = document.getElementById("searchInput").value.trim().toLowerCase();
             const result = slangWords.find(entry => entry.word.toLowerCase().includes(query));
     
-        if (result) {
-            document.getElementById("wordTitle").textContent = result.word;
-            document.getElementById("wordMeaning").innerHTML = `<strong>Meaning:</strong> ${result.meaning}`;
-            document.getElementById("wordExample").innerHTML = `<strong>Example:</strong> ${result.example}`;
-        } else {
-            document.getElementById("wordTitle").textContent = "Not Found";
-            document.getElementById("wordMeaning").innerHTML = `<strong>Meaning:</strong> No matching slang found.`;
-            document.getElementById("wordExample").innerHTML = "";
+            if (result) {
+                // Redirect to the word page with the word as a query parameter
+                window.location.href = `word.html?word=${encodeURIComponent(result.word)}`;
+            } else {
+                alert("No matching slang found.");
+            }
         }
 
     // Clear suggestions
@@ -361,11 +359,7 @@
                 const div = document.createElement("div");
                 div.textContent = suggestion.word;
                 div.onclick = () => {
-                    document.getElementById("searchInput").value = suggestion.word;
-                    document.getElementById("wordTitle").textContent = suggestion.word;
-                    document.getElementById("wordMeaning").innerHTML = `<strong>Meaning:</strong> ${suggestion.meaning}`;
-                    document.getElementById("wordExample").innerHTML = `<strong>Example:</strong> ${suggestion.example}`;
-                    suggestionsBox.innerHTML = "";
+                    window.location.href = `word.html?word=${encodeURIComponent(suggestion.word)}`;
                 };
                 suggestionsBox.appendChild(div);
             });
