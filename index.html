@@ -297,112 +297,105 @@
     </main>
 
     <script>
-        function searchWord() {
-            const query = document.getElementById("searchInput").value.trim().toLowerCase();
-            const result = slangWords.find(entry => entry.word.toLowerCase().includes(query));
-    
-            if (result) {
-                // Redirect to the word page with the word as a query parameter
-                window.location.href = './word.html?word=' + encodeURIComponent(result.word);
-            } else {
-                alert("No matching slang found.");
-            }
-        }
+    const slangWords = [
+        { word: "كفو (Kafu)", meaning: "Well done", example: "كفو عليك!", audio: "audio/kafu.mp3" },
+        { word: "فلة (Falla)", meaning: "Fun", example: "الحفلة كانت فلة!", audio: "audio/falla.mp3" },
+        { word: "تمام (Tamam)", meaning: "Good", example: "أنا تمام", audio: "audio/tamam.mp3" },
+    ];
 
-    // Clear suggestions
-    document.getElementById("autocompleteSuggestions").innerHTML = "";
-}
-        const slangWords = [
-            { word: "كفو (Kafu)", meaning: "Well done", example: "كفو عليك!", audio: "audio/kafu.mp3" },
-            { word: "فلة (Falla)", meaning: "Fun", example: "الحفلة كانت فلة!", audio: "audio/falla.mp3" },
-            { word: "تمام (Tamam)", meaning: "Good", example: "أنا تمام", audio: "audio/tamam.mp3" },
-        ];
+    function displayWordOfTheDay() {
+        const randomWord = slangWords[Math.floor(Math.random() * slangWords.length)];
+        document.getElementById("wordTitle").textContent = randomWord.word;
+        document.getElementById("wordMeaning").innerHTML = `<strong>Meaning:</strong> ${randomWord.meaning}`;
+        document.getElementById("wordExample").innerHTML = `<strong>Example:</strong> ${randomWord.example}`;
+    }
 
-        // Populate Word of the Day
-        function displayWordOfTheDay() {
-            const randomWord = slangWords[Math.floor(Math.random() * slangWords.length)];
-            document.getElementById("wordTitle").textContent = randomWord.word;
-            document.getElementById("wordMeaning").innerHTML = `<strong>Meaning:</strong> ${randomWord.meaning}`;
-            document.getElementById("wordExample").innerHTML = `<strong>Example:</strong> ${randomWord.example}`;
-        }
-
-        // Listen to Pronunciation
-        function listenToPronunciation() {
-            const word = document.getElementById("wordTitle").textContent;
-            const selectedWord = slangWords.find(entry => entry.word === word);
-            if (selectedWord && selectedWord.audio) {
-                const audio = new Audio(selectedWord.audio);
-                audio.play();
-            }
-        }
-
-        // Fun Facts
-        function displayFunFact() {
-            const facts = [
-                "Did you know? 'فلة (Falla)' is used in Saudi Arabia to describe fun parties!",
-                "'كفو (Kafu)' is often said to compliment someone's effort.",
-                "'تمام (Tamam)' is universally understood across Arabic dialects."
-            ];
-            const randomFact = facts[Math.floor(Math.random() * facts.length)];
-            document.getElementById("funFactText").textContent = randomFact;
-        }
-
-        // Autocomplete Suggestions
-        function showSuggestions(query) {
-            const suggestionsBox = document.getElementById("autocompleteSuggestions");
-            suggestionsBox.innerHTML = "";
-            if (!query) return;
-            const suggestions = slangWords.filter(wordObj =>
-                wordObj.word.toLowerCase().includes(query.toLowerCase())
-            );
-            suggestions.forEach(suggestion => {
-                const div = document.createElement("div");
-                div.textContent = suggestion.word;
-                div.onclick = () => {
-                    window.location.href = './word.html?word=' + encodeURIComponent(suggestion.word);
-                };
-                suggestionsBox.appendChild(div);
-            });
-        }
-
-        // Audio Guessing Game
-        let audioWord;
-        function playAudioGame() {
-            audioWord = slangWords[Math.floor(Math.random() * slangWords.length)];
-            const audio = new Audio(audioWord.audio);
+    function listenToPronunciation() {
+        const word = document.getElementById("wordTitle").textContent;
+        const selectedWord = slangWords.find(entry => entry.word === word);
+        if (selectedWord && selectedWord.audio) {
+            const audio = new Audio(selectedWord.audio);
             audio.play();
-            document.getElementById("audioGameFeedback").textContent = "Guess the word!";
         }
+    }
 
-        // Word Scramble Game
-        let scrambledWordOriginal;
-        function loadScrambledWord() {
-            const randomWord = slangWords[Math.floor(Math.random() * slangWords.length)];
-            scrambledWordOriginal = randomWord.word;
-            const scrambled = scrambledWordOriginal.split("").sort(() => 0.5 - Math.random()).join("");
-            document.getElementById("scrambledWord").textContent = `Scrambled Word: ${scrambled}`;
-        }
+    function displayFunFact() {
+        const facts = [
+            "Did you know? 'فلة (Falla)' is used in Saudi Arabia to describe fun parties!",
+            "'كفو (Kafu)' is often said to compliment someone's effort.",
+            "'تمام (Tamam)' is universally understood across Arabic dialects."
+        ];
+        const randomFact = facts[Math.floor(Math.random() * facts.length)];
+        document.getElementById("funFactText").textContent = randomFact;
+    }
 
-        function checkScramble() {
-            const userGuess = document.getElementById("scrambleInput").value;
-            const feedback = document.getElementById("scrambleFeedback");
-            if (userGuess === scrambledWordOriginal) {
-                feedback.textContent = "🎉 Correct!";
-                feedback.style.color = "green";
-            } else {
-                feedback.textContent = `❌ Wrong! The correct word was: ${scrambledWordOriginal}`;
-                feedback.style.color = "red";
-            }
+    function showSuggestions(query) {
+        const suggestionsBox = document.getElementById("autocompleteSuggestions");
+        suggestionsBox.innerHTML = "";
+        if (!query) return;
+        const suggestions = slangWords.filter(wordObj =>
+            wordObj.word.toLowerCase().includes(query.toLowerCase())
+        );
+        suggestions.forEach(suggestion => {
+            const div = document.createElement("div");
+            div.textContent = suggestion.word;
+            div.onclick = () => {
+                window.location.href = './word.html?word=' + encodeURIComponent(suggestion.word);
+            };
+            suggestionsBox.appendChild(div);
+        });
+    }
+
+    function searchWord() {
+        const query = document.getElementById("searchInput").value.trim().toLowerCase();
+        const result = slangWords.find(entry => entry.word.toLowerCase().includes(query));
+        if (result) {
+            window.location.href = `./word.html?word=${encodeURIComponent(result.word)}`;
+        } else {
+            alert("Word not found!");
         }
+    }
+
+    let audioWord;
+    function playAudioGame() {
+        audioWord = slangWords[Math.floor(Math.random() * slangWords.length)];
+        const audio = new Audio(audioWord.audio);
+        audio.play();
+        document.getElementById("audioGameFeedback").textContent = "Guess the word!";
+    }
+
+    let scrambledWordOriginal;
+    function loadScrambledWord() {
+        const randomWord = slangWords[Math.floor(Math.random() * slangWords.length)];
+        scrambledWordOriginal = randomWord.word;
+        const scrambled = scrambledWordOriginal.split("").sort(() => 0.5 - Math.random()).join("");
+        document.getElementById("scrambledWord").textContent = `Scrambled Word: ${scrambled}`;
+    }
+
+    function checkScramble() {
+        const userGuess = document.getElementById("scrambleInput").value;
+        const feedback = document.getElementById("scrambleFeedback");
+        if (userGuess === scrambledWordOriginal) {
+            feedback.textContent = "🎉 Correct!";
+            feedback.style.color = "green";
+        } else {
+            feedback.textContent = `❌ Wrong! The correct word was: ${scrambledWordOriginal}`;
+            feedback.style.color = "red";
+        }
+    }
+
+    // Wait for DOM to load before adding event listeners
+    window.onload = () => {
         document.getElementById("searchInput").addEventListener("keypress", function (e) {
             if (e.key === "Enter") {
                 searchWord();
             }
         });
-        // Initialize the page
+
         displayWordOfTheDay();
         displayFunFact();
         loadScrambledWord();
-    </script>
+    };
+</script>
 </body>
 </html>
