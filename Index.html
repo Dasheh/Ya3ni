@@ -297,6 +297,23 @@
     </main>
 
     <script>
+        function searchWord() {
+            const query = document.getElementById("searchInput").value.trim().toLowerCase();
+            const result = slangWords.find(entry => entry.word.toLowerCase().includes(query));
+    
+        if (result) {
+            document.getElementById("wordTitle").textContent = result.word;
+            document.getElementById("wordMeaning").innerHTML = `<strong>Meaning:</strong> ${result.meaning}`;
+            document.getElementById("wordExample").innerHTML = `<strong>Example:</strong> ${result.example}`;
+        } else {
+            document.getElementById("wordTitle").textContent = "Not Found";
+            document.getElementById("wordMeaning").innerHTML = `<strong>Meaning:</strong> No matching slang found.`;
+            document.getElementById("wordExample").innerHTML = "";
+        }
+
+    // Clear suggestions
+    document.getElementById("autocompleteSuggestions").innerHTML = "";
+}
         const slangWords = [
             { word: "كفو (Kafu)", meaning: "Well done", example: "كفو عليك!", audio: "audio/kafu.mp3" },
             { word: "فلة (Falla)", meaning: "Fun", example: "الحفلة كانت فلة!", audio: "audio/falla.mp3" },
@@ -344,7 +361,11 @@
                 const div = document.createElement("div");
                 div.textContent = suggestion.word;
                 div.onclick = () => {
-                    alert(`You selected: ${suggestion.word}`);
+                    document.getElementById("searchInput").value = suggestion.word;
+                    document.getElementById("wordTitle").textContent = suggestion.word;
+                    document.getElementById("wordMeaning").innerHTML = `<strong>Meaning:</strong> ${suggestion.meaning}`;
+                    document.getElementById("wordExample").innerHTML = `<strong>Example:</strong> ${suggestion.example}`;
+                    suggestionsBox.innerHTML = "";
                 };
                 suggestionsBox.appendChild(div);
             });
@@ -379,7 +400,11 @@
                 feedback.style.color = "red";
             }
         }
-
+        document.getElementById("searchInput").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") {
+                searchWord();
+            }
+        });
         // Initialize the page
         displayWordOfTheDay();
         displayFunFact();
