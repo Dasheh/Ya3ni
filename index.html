@@ -303,7 +303,7 @@
     
             if (result) {
                 // Redirect to the word page with the word as a query parameter
-                window.location.href = `word.html?word=${encodeURIComponent(result.word)}`;
+                window.location.href = './word.html?word=' + encodeURIComponent(result.word);
             } else {
                 alert("No matching slang found.");
             }
@@ -359,7 +359,7 @@
                 const div = document.createElement("div");
                 div.textContent = suggestion.word;
                 div.onclick = () => {
-                    window.location.href = `word.html?word=${encodeURIComponent(suggestion.word)}`;
+                    window.location.href = './word.html?word=' + encodeURIComponent(suggestion.word);
                 };
                 suggestionsBox.appendChild(div);
             });
