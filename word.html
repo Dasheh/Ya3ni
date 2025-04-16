@@ -1,29 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Word Details</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Word Details - Ya3ni</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #f7f4eb;
       color: #1b4332;
+      margin: 0;
       padding: 2rem;
-      max-width: 800px;
-      margin: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    h1 {
+    .back-link {
+      align-self: flex-start;
+      margin-bottom: 1.5rem;
+      font-size: 1rem;
+      color: #1b4332;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.3s ease;
+    }
+
+    .back-link:hover {
+      color: #14532d;
+    }
+
+    .word-card {
+      background-color: #d8e3dc;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 600px;
+      width: 100%;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .word-card h1 {
       font-size: 2.5rem;
       margin-bottom: 1rem;
     }
 
-    p {
+    .word-card p {
       font-size: 1.2rem;
+      margin: 0.8rem 0;
     }
 
     button {
-      margin-top: 1rem;
+      margin-top: 1.5rem;
       background: #1b4332;
       color: #f7f4eb;
       border: none;
@@ -31,31 +61,47 @@
       padding: 0.7rem 1.5rem;
       font-size: 1rem;
       cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #14532d;
+    }
+
+    @media (max-width: 600px) {
+      .word-card {
+        padding: 1.5rem;
+      }
+
+      .word-card h1 {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
 <body>
-  <h1 id="wordTitle">Loading...</h1>
-  <p id="wordMeaning"><strong>Meaning:</strong> Loading...</p>
-  <p id="wordExample"><strong>Example:</strong> Loading...</p>
-  <button onclick="playAudio()">🔊 Listen to Pronunciation</button>
+  <a href="index.html" class="back-link">← Back to Home</a>
+
+  <div class="word-card">
+    <h1 id="wordTitle">Loading...</h1>
+    <p id="wordMeaning"><strong>Meaning:</strong> Loading...</p>
+    <p id="wordExample"><strong>Example:</strong> Loading...</p>
+    <button onclick="playAudio()">🔊 Listen to Pronunciation</button>
+  </div>
 
   <script>
     const slangWords = [
       { word: "كفو (Kafu)", meaning: "Well done", example: "كفو عليك!", audio: "audio/kafu.mp3" },
       { word: "فلة (Falla)", meaning: "Fun", example: "الحفلة كانت فلة!", audio: "audio/falla.mp3" },
-      { word: "تمام (Tamam)", meaning: "Good", example: "أنا تمام", audio: "audio/tamam.mp3" }
+      { word: "تمام (Tamam)", meaning: "Good", example: "أنا تمام", audio: "audio/tamam.mp3" },
     ];
 
     const params = new URLSearchParams(window.location.search);
     const wordQuery = params.get("word");
 
-    let wordData = null;
-
-    if (wordQuery) {
-      const cleanQuery = decodeURIComponent(wordQuery).toLowerCase();
-      wordData = slangWords.find(w => w.word.toLowerCase() === cleanQuery);
-    }
+    const wordData = slangWords.find(w =>
+      w.word.toLowerCase().includes(wordQuery?.toLowerCase())
+    );
 
     if (wordData) {
       document.getElementById("wordTitle").textContent = wordData.word;
